@@ -1,54 +1,26 @@
 workflows:
-  ios-release:
-    name: iOS Release (AlarmLock)
+  ios-no-sign:
+    name: iOS Build (No Signing)
     max_build_duration: 60
-    instance_type: mac_mini_m2
-    environment:
-      flutter: stable
-      xcode: latest
-    scripts:
-      - name: Bootstrap Flutter platforms (android/ios)
-        script: |
-          # If the platform folders don't exist (or if you're using this as a template),
-          # generate them on CI.
-          flutter --version
-          if [ ! -d "ios" ] || [ ! -d "android" ]; then
-            flutter create . --platforms=ios,android --org com.example --project-name alarm_lock
-          fi
-      - name: Get packages
-        script: |
-          flutter pub get
-      - name: Build iOS IPA
-        script: |
-          flutter build ipa --release
-    artifacts:
-      - build/ios/ipa/*.ipa
-      - build/ios/archive/*.xcarchive
-    publishing:
-      email:
-        recipients:
-          - you@example.com
+    instance_type: mac_mini_m1
 
-  android-release:
-    name: Android Release (AlarmLock)
-    max_build_duration: 60
-    instance_type: mac_mini_m2
     environment:
       flutter: stable
+
     scripts:
-      - name: Bootstrap Flutter platforms (android/ios)
+      - name: Get Flutter packages
+        script: flutter pub get
+
+      - name: Clean project
+        script: flutter clean
+
+      - name: Build iOS Simulator (no signing required)
+        script: flutter build ios --simulator --debug
+
+      - name: Zip source code
         script: |
-          flutter --version
-          if [ ! -d "ios" ] || [ ! -d "android" ]; then
-            flutter create . --platforms=ios,android --org com.example --project-name alarm_lock
-          fi
-      - name: Get packages
-        script: |
-          flutter pub get
-      - name: Build APK/AAB
-        script: |
-          flutter build apk --release
-          flutter build appbundle --release
+          zip -r source.zip . -x ".git/*" "build/*"
+
     artifacts:
-      - build/app/outputs/flutter-apk/app-release.apk
-      - build/app/outputs/bundle/release/app-release.aab
+      - build/ios/iphonesimulator/Runner.app
+      - source.zip
