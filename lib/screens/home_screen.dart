@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:go_router/go_router.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
 import '../state/alarm_store.dart';
+import '../services/notification_service.dart';
+import '../services/alarm_tap_bus.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, required this.store});
@@ -13,10 +16,44 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool _didInit = false;
+
   @override
   void initState() {
     super.initState();
     widget.store.addListener(_onStore);
+
+    // 🔴 Run heavy initialization AFTER UI appears (fixes iOS white screen)
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    if (_didInit) return;
+    _didInit = true;
+
+    try {
+      // Let first frame render so iOS watchdog is satisfied
+      await Future.delayed(const Duration(milliseconds: 10));
+
+      // Safe to initialize now
+      tz.initializeTimeZones();
+
+      await widget.store.init();
+
+      await NotificationService.instance.init(
+        onAlarmTapped: (alarmId) => AlarmTapBus.instance.push(alarmId),
+      );
+
+      final launchAlarmId =
+          await NotificationService.instance.appLaunchAlarmIdIfAny();
+
+      if (launchAlarmId != null && mounted) {
+        AlarmTapBus.instance.push(launchAlarmId);
+      }
+    } catch (e, st) {
+      debugPrint("Initialization failed: $e");
+      debugPrintStack(stackTrace: st);
+    }
   }
 
   @override
@@ -90,7 +127,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           Text(
                                             a.timeLabel(),
-                                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium
+                                                ?.copyWith(fontWeight: FontWeight.w800),
                                           ),
                                           const SizedBox(height: 4),
                                           Text(
