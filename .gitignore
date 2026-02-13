@@ -10,3 +10,5 @@ android/local.properties
 *.iml
 .idea/
 .DS_Store
+devtools_options.yaml 
+*.code-workspace 
