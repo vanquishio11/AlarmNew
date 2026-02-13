@@ -4,28 +4,58 @@
 <dict>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+
 	<key>CFBundleDisplayName</key>
 	<string>Alarm Lock</string>
+
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
+
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+
 	<key>CFBundleName</key>
 	<string>alarm_lock</string>
+
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
+
 	<key>CFBundleShortVersionString</key>
 	<string>$(FLUTTER_BUILD_NAME)</string>
+
 	<key>CFBundleSignature</key>
 	<string>????</string>
+
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- 🔔 REQUIRED: Local Notifications -->
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Alarm Lock needs permission to send notifications so your alarms can ring.</string>
+
+	<!-- 📁 REQUIRED: File picker / custom alarm sounds -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Alarm Lock needs access to your files so you can choose custom alarm sounds.</string>
+
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Alarm Lock may save selected alarm sounds.</string>
+
+	<key>NSMediaLibraryUsageDescription</key>
+	<string>Alarm Lock accesses media files to let you select alarm audio.</string>
+
+	<!-- 🔊 REQUIRED for audio session usage -->
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Alarm Lock may use audio features for alarms.</string>
+
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -47,18 +77,23 @@
 			</array>
 		</dict>
 	</dict>
+
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
