@@ -1,0 +1,54 @@
+workflows:
+  ios-release:
+    name: iOS Release (AlarmLock)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Bootstrap Flutter platforms (android/ios)
+        script: |
+          # If the platform folders don't exist (or if you're using this as a template),
+          # generate them on CI.
+          flutter --version
+          if [ ! -d "ios" ] || [ ! -d "android" ]; then
+            flutter create . --platforms=ios,android --org com.example --project-name alarm_lock
+          fi
+      - name: Get packages
+        script: |
+          flutter pub get
+      - name: Build iOS IPA
+        script: |
+          flutter build ipa --release
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive
+    publishing:
+      email:
+        recipients:
+          - you@example.com
+
+  android-release:
+    name: Android Release (AlarmLock)
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: stable
+    scripts:
+      - name: Bootstrap Flutter platforms (android/ios)
+        script: |
+          flutter --version
+          if [ ! -d "ios" ] || [ ! -d "android" ]; then
+            flutter create . --platforms=ios,android --org com.example --project-name alarm_lock
+          fi
+      - name: Get packages
+        script: |
+          flutter pub get
+      - name: Build APK/AAB
+        script: |
+          flutter build apk --release
+          flutter build appbundle --release
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
+      - build/app/outputs/bundle/release/app-release.aab
