@@ -64,7 +64,7 @@ class _AlarmLockAppState extends State<AlarmLockApp> {
           displaySmall: TextStyle(fontWeight: FontWeight.w700),
           titleLarge: TextStyle(fontWeight: FontWeight.w700),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           elevation: 0,
           color: colorScheme.surfaceContainerHighest.withOpacity(0.55),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
